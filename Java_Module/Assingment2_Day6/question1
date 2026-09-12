@@ -1,0 +1,24 @@
+public class Base {
+void display() {
+	System.out.println("This is parent class");
+}
+}
+public class child extends Base{
+	void show() {
+		System.out.println("This id child class");
+	}
+
+}
+public class main {
+	public static void main(String[] args) {
+		Base obj1=new Base();
+		obj1.display();
+		
+		child obj2=new child();
+		obj2.show();
+		
+		obj2.display();
+		
+	}
+
+}
