@@ -1,0 +1,83 @@
+/*Create a class named 'Member' having the following members:
+Data members
+1 - Name
+2 - Age
+3 - Phone number
+4 - Address
+5 - Salary
+It also has a method named 'printSalary' which prints the salary of the members.
+Create an object of the above class and take input from the console for each of the
+fields and finally display the data.
+Now create a class inherited from Members called PrimeMembers and add the
+properties
+1. JoiningYear
+2. JoiningFees
+3. isActive
+To the PrimeMembers add a method called display and display all the fields from
+the parent class and derived class. Each of the above classes should have their
+respective accessors and mutators*/
+
+
+public class Member {
+	String Name;
+	int Age;
+	String Phone_number;
+	String Address;
+	double Salary;
+ void printSalary(double salary) {
+	 System.out.println(salary);
+ }
+} 
+
+
+class PrimeMembers extends Member{
+	 int JoiningYear;
+	 double JoinningFees;
+	 boolean isActive;
+	  void display() {
+		  System.out.println("Name:          "+Name);
+		  System.out.println("Age:           "+Age);
+		  System.out.println("Phone Number:  "+Phone_number);
+		  System.out.println("Address:       "+Address);
+		  System.out.println("Salary:        "+Salary);
+		  System.out.println("Joining Year:  "+JoiningYear);
+		  System.out.println("Joining Fees:  "+JoinningFees);
+		  System.out.println("Member Active:  "+isActive);
+		  
+	  }
+	 
+ }
+
+public class Program {
+	 public static void main(String[] args) {
+		 //Member obj=new Member();
+		 PrimeMembers obj=new PrimeMembers();
+		 System.out.println("Enter Name:");
+		 obj.Name=ConsoleInput.getString();
+		 
+		 System.out.println("Enter Age:");
+		 obj.Age=ConsoleInput.getInt();
+		 
+		 System.out.println("Enter Phone Number:");
+		 obj.Phone_number=ConsoleInput.getString();
+		 
+		 System.out.println("Enter Salary:");
+	     obj.Salary=ConsoleInput.getFloat();
+	     
+	     System.out.println("Enter Address:");
+		 obj.Address=ConsoleInput.getString();
+		 
+		 System.out.println("Enter Joining Year:");
+		 obj.JoiningYear=ConsoleInput.getInt();
+		 
+		 System.out.println("Enter Joining Fees:");
+		 obj.JoinningFees=ConsoleInput.getFloat();
+		 
+		
+		 System.out.print("print salary from base class using object of derived class: ");
+		 obj.printSalary(obj.Salary);
+		 obj.display();
+		  }
+}
+
+ 
