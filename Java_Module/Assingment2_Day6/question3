@@ -1,0 +1,60 @@
+/*Create a class named 'Rectangle' with two data members 'length' and 'breadth' and
+two methods to print the area and perimeter of the rectangle respectively. Its
+constructor having parameters for length and breadth is used to initialize length and
+breadth of the rectangle. Let class 'Square' inherit the 'Rectangle' class with its
+constructor having a parameter for its side. Print the area and perimeter of a rectangle
+and a square.*/
+
+public class RectangleInheritance {
+int length;
+int breadth;
+
+public RectangleInheritance(int length, int breadth) {
+	//super();
+	this.length = length;
+	this.breadth = breadth;
+}
+
+void printArea() {
+	int area=length*breadth;
+	System.out.println("Area of Rectangle: "+area);
+}
+
+void printPerimeter() {
+	int perimeter=(2*length)+(2*breadth);	
+	System.out.println("Perimeter Of Rectangle:"+perimeter);
+}
+}
+
+public class Square extends RectangleInheritance{
+	int side;
+	
+	Square(int side){
+		super(side,side);
+	}
+
+}
+
+public class Program2 {
+	public static void main(String[] args) {
+		
+	
+		System.out.println("Enter length of Rectangle");
+		int length=ConsoleInput.getInt();
+		
+		System.out.println("Enter breadth of Rectangle");
+		int breadth=ConsoleInput.getInt();
+		
+		System.out.println("Enter side of Square");
+		int side=ConsoleInput.getInt();
+		RectangleInheritance obj1=new RectangleInheritance(length,breadth);
+	
+		obj1.printArea();
+		obj1. printPerimeter();
+		System.out.println("Area and perimeter of Square:");
+		Square obj=new Square(side);
+		obj.printArea();
+		obj. printPerimeter();
+	}
+	
+}
