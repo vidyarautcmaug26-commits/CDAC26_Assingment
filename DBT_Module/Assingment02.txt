@@ -1,1 +1,187 @@
+// Question_01 .Write a SQL query to create Employee & Department table with specific columns and constraints.(Note- Create Table, insert data as per your Choice)
 
+create database Employee;
+use Employee;
+create table Employee(department_Id int,department_Name,Employee_Location varchar(20));
+
+rename table Emoloyee to Department;
+
+alter table Department add constraint primary key(department_Id),
+add constraint unique(department_Name);
+
+
+create Emoloyee(Employee_ID int,Employee_Name char(20),Mobile_Number int,Email_Id varchar(40));
+alter table Employee
+add constraint primary key(Employee_ID),
+add constraint unique(Email_Id);
+
+// question_02.. Write a SQL query to add any new column to an existing table.
+
+alter table Employee add Employee_Salary int;
+alter table Department add Department_Head varchar(30);
+
+//Question_03. Write a SQL query to insert multiple records (At least 5) into a table in a single operation.
+
+insert into Employee(Employee_Name,Mobile_Number,Email_Id,Employee_Salary)values('vidya',8925997777,'rautvs77@gmail.com',65000),
+('Anvesha',7517054256,'anveshapawar@gamil.com',85000),
+('sandhya',7551455555,'sandhyap55@gmail.com',98000),
+('Yogesh',7515487922,'yogeshr44@gmail.com',456000),
+('pooja',7447386423,'psraut56@gmail.com',650000);
+
+//Question_04.. Write a SQL query to delete all records from a table.
+
+delete from Employee;
+
+//Question_05.Write a SQL query to update salary records from a table where id = 6.
+
+update Employee
+set Employee_Salary=70000
+where Email_Id=6;
+
+//Question_06. Write a query to grant SELECT privilege on the Emp table to user readonly_user.
+create user 'readonly'@'loaclhost'
+identified by 'readonly@123';
+
+grant select on Employee.Employee
+to 'readonly'@'localhost';
+
+show grants for 'readonly'@'loaclhost';
+
+//question_07.. Write a query to revoke INSERT privilege on the Emp table from user temp_user.
+
+grant insert on Employee.Emoloyee
+to 'readonly'@'loaclhost';
+
+revoke insert on Emoloyee.Emoloyee
+from 'readonly'@'loaclhost';
+
+//Questiob_08.Write a query to insert a new employee into the Emp table and commit the transaction.
+
+insert into Emoloyee(Employee_Name,mobile_Number,Email_Id,Employee_Salary)values('Atharva','5689231478','athervegf@gmail.com',89000);
+
+commit;
+
+//Question_09. Write a query to update the Salary of an employee with EmpID = 101 and commit the transaction.
+update Employee
+set Employee_Salary=88000
+where Employee_ID=101;
+commit;
+
+//Question_10. Write a query to set a SAVEPOINT before updating the DeptID of an employee.
+start transaction;
+savepoint before_update;
+
+update Employee
+set Employee_Id=2
+where Employee_Id=7;
+
+//Question_11. Write a query to rollback to the previously created SAVEPOINT.
+rollback to savepoint s1;
+
+//Question_12. Write a query to truncate all data from the Emp table.
+truncate table Employee;
+
+//Question_13. Write a query to list all employees whose salary is greater than 50,000.
+
+select * from Employee
+where Employee_salary>50000;
+
+//Question_14. Write a query to increase the salary of all employees in DeptID = 10 by 10%.
+ALTER TABLE Employee
+ADD Department_ID INT;
+
+UPDATE Employee
+SET Department_ID = 10
+WHERE Employee_Id IN (1, 2);
+
+update Employee
+set Employee_Salary=Employee_Salary+(Employee_Salary*0.10)
+where Department_Id=10;
+
+//Question_15. Write a query to count the total number of employees in each department.
+UPDATE Employee
+SET Department_ID = 1
+WHERE Employee_Id IN (1, 2);
+
+
+UPDATE Employee
+SET Department_ID = 2
+WHERE Employee_Id IN (3, 4);
+
+
+UPDATE Employee
+SET Department_ID = 3
+WHERE Employee_Id IN (5, 6);
+
+select Department_ID,count(*) as Total_Employees
+from employee
+group by Department_ID;
+
+//Question_16. Write a query to list departments that have no employees. & create a view for those salespeople who belong to the city of Mumbai. 
+SELECT d.Department_ID, d.department_Name
+FROM Department d
+LEFT JOIN Employee e
+ON d.Department_ID = e.Department_ID
+WHERE e.Employee_Id IS NULL;
+
+create view Mumbai_Employees As
+select e.Employee_ID,e.Employee_Name,e.Employee_Salary,d.Department_Name,d.Employee_Location
+from Employee e
+join Department d
+on e.Department_ID=d.Department_ID
+where d.Employee_Location='Mumbai';
+
+//Question_17. Write a query to display the highest salary among all employees.
+select max(Employee_salary) as Highest_Salary
+from Employee;
+OR
+select Employee_Name,Employee_salary
+from Employee
+where Employee_salary=(select max(Employee_salary) from Employee);
+
+//Question_18.. Write a query to display the 2nd highest salary among all employees.
+select max(Employee_salary) as second_Highest_salary
+from Employee
+where Employee_salary<(select max(Employee_salary) from Employee);
+
+OR
+select distinct Employee_salary
+from Employee
+order by Employee_salary DESC
+limit 1 offset 1;
+
+//Question_19.. Write a query to show all employees ordered by JoiningDate in descending order.
+alter table Employee
+add joiningdate Date;
+
+update Employee
+set joiningdate="2026-10-5"
+where Employee_Id=1;
+
+
+update Employee
+set joiningdate="2026-05-5"
+where Employee_Id=2;
+
+
+update Employee
+set joiningdate="2025-06-5"
+where Employee_Id=3;
+
+
+update Employee
+set joiningdate="2023-02-5"
+where Employee_Id=4;
+
+update Employee
+set joiningdate="2022-09-5"
+where Employee_Id=5;
+
+update Employee
+set joiningdate="2021-01-5"
+where Employee_Id=6;
+
+
+//Question_20.. Write a query to rename the DeptName column to DepartmentName.
+ALTER TABLE Department
+RENAME COLUMN department_Name TO dept_Name;
