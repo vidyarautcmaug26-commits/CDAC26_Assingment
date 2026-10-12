@@ -1,0 +1,358 @@
+1.	Write a Relational Algebra expression to perform Cartesian Product (Cross Join) between Emp and Dept tables.
+
+     create table emp(emp_id int,emp_name char(20),salary int,department char(20));
+	 
+	 insert into emp(emp_id,emp_name,salary,department)values('vaishali',25000,'Testing'),
+	 ('Swapnaja',35000,'maintenance'),
+	 ('Arati',45000,'Quality'),
+	 ('Jyoti',50000,'production'),
+	 ('vidya',65000,'IT');
+	 
++--------+----------+--------+-------------+
+| emp_id | emp_name | salary | department  |
++--------+----------+--------+-------------+
+|      1 | vaishali |  25000 | Testing     |
+|      2 | Swapnaja |  35000 | maintenance |
+|      3 | vidya    |  65000 | IT          |
+|      4 | pooja    |  85000 | production  |
+|      5 | sayali   |  95000 | Quality     |
+|      6 | Juhi     |  75000 | Design      |
++--------+----------+--------+-------------+
+	 
+	  insert into dept(dept_name,dep_head_name)
+	  values('Testing','Shrikant'),('maintenance','Prashad'),
+	  ('IT','Yogesh'),
+	  ('production','Purva'),
+	  ('Quality','Anvesha');
+	  
++---------+-------------+---------------+
+| dept_id | dept_name   | dep_head_name |
++---------+-------------+---------------+
+|       1 | Testing     | Shrikant      |
+|       2 | maintenance | Prashad       |
+|       3 | IT          | Yogesh        |
+|       4 | production  | Purva         |
+|       5 | Quality     | Anvesha       |
++---------+-------------+---------------+
+
+select e.em_name,d.dep_head_name
+from emp as emp
+cross join dept as d;
+
++----------+---------------+
+| emp_name | dep_head_name |
++----------+---------------+
+| vaishali | Anvesha       |
+| vaishali | Purva         |
+| vaishali | Yogesh        |
+| vaishali | Prashad       |
+| vaishali | Shrikant      |
+| Swapnaja | Anvesha       |
+| Swapnaja | Purva         |
+| Swapnaja | Yogesh        |
+| Swapnaja | Prashad       |
+| Swapnaja | Shrikant      |
+| vidya    | Anvesha       |
+| vidya    | Purva         |
+| vidya    | Yogesh        |
+| vidya    | Prashad       |
+| vidya    | Shrikant      |
+| pooja    | Anvesha       |
+| pooja    | Purva         |
+| pooja    | Yogesh        |
+| pooja    | Prashad       |
+| pooja    | Shrikant      |
+| sayali   | Anvesha       |
+| sayali   | Purva         |
+| sayali   | Yogesh        |
+| sayali   | Prashad       |
+| sayali   | Shrikant      |
+| Juhi     | Anvesha       |
+| Juhi     | Purva         |
+| Juhi     | Yogesh        |
+| Juhi     | Prashad       |
+| Juhi     | Shrikant      |
++----------+---------------+
+
+
+2.Write a SQL query to perform an INNER JOIN between Emp and Dept tables 
+displaying EmpName and DeptName.
+
+select e.emp_id,e.emp_name,d.dep_head_name
+from emp as e
+inner join dept as d
+on e.emp_id=d.dept_id;
+
++--------+----------+---------------+
+| emp_id | emp_name | dep_head_name |
++--------+----------+---------------+
+|      1 | vaishali | Shrikant      |
+|      2 | Swapnaja | Prashad       |
+|      3 | vidya    | Yogesh        |
+|      4 | pooja    | Purva         |
+|      5 | sayali   | Anvesha       |
++--------+----------+---------------+
+
+3.Write a SQL query to perform a LEFT OUTER JOIN between Emp and Dept tables to display 
+all employees along with their department information, including employees without a department.
+
+
+ mysql> SELECT e.emp_id, e.emp_name, e.salary, e.department,
+    ->        d.dept_id, d.dept_name, d.dep_head_name
+    -> FROM emp e
+    -> LEFT OUTER JOIN dept d
+    -> ON e.department = d.dept_name;
++--------+----------+--------+-------------+---------+-------------+---------------+
+| emp_id | emp_name | salary | department  | dept_id | dept_name   | dep_head_name |
++--------+----------+--------+-------------+---------+-------------+---------------+
+|      1 | vaishali |  25000 | Testing     |       1 | Testing     | Shrikant      |
+|      2 | Swapnaja |  35000 | maintenance |       2 | maintenance | Prashad       |
+|      3 | vidya    |  65000 | IT          |       3 | IT          | Yogesh        |
+|      4 | pooja    |  85000 | production  |       4 | production  | Purva         |
+|      5 | sayali   |  95000 | Quality     |       5 | Quality     | Anvesha       |
+|      6 | Juhi     |  75000 | Design      |    NULL | NULL        | NULL          |
++--------+----------+--------+-------------+---------+-------------+---------------+
+
+
+5.Write a SQL query to perform a NATURAL JOIN between Emp and Dept.
+
+mysql> SELECT *
+    -> FROM emp
+    -> JOIN dept
+    -> ON emp.department = dept.dept_name;
++--------+----------+--------+-------------+---------+-------------+---------------+
+| emp_id | emp_name | salary | department  | dept_id | dept_name   | dep_head_name |
++--------+----------+--------+-------------+---------+-------------+---------------+
+|      1 | vaishali |  25000 | Testing     |       1 | Testing     | Shrikant      |
+|      2 | Swapnaja |  35000 | maintenance |       2 | maintenance | Prashad       |
+|      3 | vidya    |  65000 | IT          |       3 | IT          | Yogesh        |
+|      4 | pooja    |  85000 | production  |       4 | production  | Purva         |
+|      5 | sayali   |  95000 | Quality     |       5 | Quality     | Anvesha       |
++--------+----------+--------+-------------+---------+-------------+---------------+
+
+
+6.Write a SQL query to perform a CROSS JOIN between Emp and Project table.
+
+mysql> CREATE TABLE Project (
+    ->     project_id INT PRIMARY KEY AUTO_INCREMENT,
+    ->     project_name VARCHAR(30),
+    ->     emp_id INT
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> INSERT INTO Project (project_name, emp_id)
+    -> VALUES
+    -> ('Library System', 1),
+    -> ('Banking App', 2),
+    -> ('E-commerce', 3);
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select e.emp_name,d.dept_name
+    -> from emp as e
+    -> cross join dept as d;
++----------+-------------+
+| emp_name | dept_name   |
++----------+-------------+
+| vaishali | Quality     |
+| vaishali | production  |
+| vaishali | IT          |
+| vaishali | maintenance |
+| vaishali | Testing     |
+| Swapnaja | Quality     |
+| Swapnaja | production  |
+| Swapnaja | IT          |
+| Swapnaja | maintenance |
+| Swapnaja | Testing     |
+| vidya    | Quality     |
+| vidya    | production  |
+| vidya    | IT          |
+| vidya    | maintenance |
+| vidya    | Testing     |
+| pooja    | Quality     |
+| pooja    | production  |
+| pooja    | IT          |
+| pooja    | maintenance |
+| pooja    | Testing     |
+| sayali   | Quality     |
+| sayali   | production  |
+| sayali   | IT          |
+| sayali   | maintenance |
+| sayali   | Testing     |
+| Juhi     | Quality     |
+| Juhi     | production  |
+| Juhi     | IT          |
+| Juhi     | maintenance |
+| Juhi     | Testing     |
++----------+-------------+
+
+
+7.Write a SQL query to create a new table EmpBackup with the same structure as Emp but no data.
+
+mysql> create table empbackup(emp_id int primary key auto_increment,emp_name char(20),salary int,department char(20));
+Query OK, 0 rows affected (0.04 sec)
+
+
+8.Write a SQL query to copy all data from Emp into EmpBackup table.
+mysql> insert into empbackup
+    -> select * from
+    -> emp;
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from empbackup;
++--------+----------+--------+-------------+
+| emp_id | emp_name | salary | department  |
++--------+----------+--------+-------------+
+|      1 | vaishali |  25000 | Testing     |
+|      2 | Swapnaja |  35000 | maintenance |
+|      3 | vidya    |  65000 | IT          |
+|      4 | pooja    |  85000 | production  |
+|      5 | sayali   |  95000 | Quality     |
+|      6 | Juhi     |  75000 | Design      |
++--------+----------+--------+-------------+
+
+9.	Write a SQL query to create a new table ProjectArchive with the same structure and data as Project.
+
+mysql> insert into projectArchive
+    -> select * from
+    -> project;
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from projectArchive;
++------------+----------------+--------+
+| project_id | project_name   | emp_id |
++------------+----------------+--------+
+|          1 | Library System |      1 |
+|          2 | Banking App    |      2 |
+|          3 | E-commerce     |      3 |
++------------+----------------+--------+
+3 rows in set (0.00 sec)
+
+
+10.Write a SQL query using a subquery to find all employees whose salary is greater than the average salary 
+of all employees.
+
+mysql> with overall_average as(
+    -> select avg(salary) as avg_salary
+    -> from emp)
+    -> select e.emp_name,e.department,e.salary
+    -> from emp as e
+    -> cross join overall_average oa
+    -> on e.salary>oa.avg_salary;
++----------+------------+--------+
+| emp_name | department | salary |
++----------+------------+--------+
+| vidya    | IT         |  65000 |
+| pooja    | production |  85000 |
+| sayali   | Quality    |  95000 |
+| Juhi     | Design     |  75000 |
++----------+------------+--------+
+4 rows in set (0.02 sec)
+
+
+12.Write a SQL query using a subquery in WHERE clause to find employees working in departments located 
+in 'Mumbai'.
+
+mysql> alter table emp
+    -> add emp_location char(20);
+	
+mysql> update emp
+    -> set emp_location=case emp_id
+    -> when 1 then 'pune'
+    -> when 2 then 'mumbai'
+    -> when 3 then 'nashik'
+    -> when 4 then 'nagpur'
+    -> when 5 then 'solapur'
+    -> when 6 then 'sangli'
+    -> end
+    -> where emp_id in(1,2,3,4,5,6);
+Query OK, 6 rows affected (0.02 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+mysql> select * from emp
+    -> ;
++--------+----------+--------+-------------+--------------+
+| emp_id | emp_name | salary | department  | emp_location |
++--------+----------+--------+-------------+--------------+
+|      1 | vaishali |  25000 | Testing     | pune         |
+|      2 | Swapnaja |  35000 | maintenance | mumbai       |
+|      3 | vidya    |  65000 | IT          | nashik       |
+|      4 | pooja    |  85000 | production  | nagpur       |
+|      5 | sayali   |  95000 | Quality     | solapur      |
+|      6 | Juhi     |  75000 | Design      | sangli       |
++--------+----------+--------+-------------+--------------+
+
+
+
+mysql> select * from emp
+    -> where emp_location='mumbai';
++--------+----------+--------+-------------+--------------+
+| emp_id | emp_name | salary | department  | emp_location |
++--------+----------+--------+-------------+--------------+
+|      2 | Swapnaja |  35000 | maintenance | mumbai       |
++--------+----------+--------+-------------+--------------+
+1 row in set (0.00 sec)
+
+
+
+13.	Write a SQL query to display all departments where the number of employees is greater
+ than 5, using a subquery.
+
+
+mysql> select department
+    -> from emp
+    -> group by department
+    -> having count(*)>5;
+Empty set (0.01 sec)
+
+
+14.Write a subqueries for find out Max salary of employee.
+
+mysql> select emp_name,salary
+    -> from emp
+    -> where salary=(
+    -> select max(salary)
+    -> from emp);
++----------+--------+
+| emp_name | salary |
++----------+--------+
+| sayali   |  95000 |
++----------+--------+
+1 row in set (0.01 sec)
+
+OR 
+
+mysql> select emp_name,salary,
+    -> max(salary) over(order by salary)
+    -> from emp limit 1;
++----------+--------+-----------------------------------+
+| emp_name | salary | max(salary) over(order by salary) |
++----------+--------+-----------------------------------+
+| vaishali |  25000 |                             25000 |
++----------+--------+-----------------------------------+
+1 row in set (0.00 sec)
+
+15.	Write a  self join query for each table.
+
+mysql> SELECT d1.dept_name AS Department1,
+    ->        d2.dept_name AS Department2
+    -> FROM Dept d1
+    -> JOIN Dept d2
+    -> ON d1.dept_id < d2.dept_id;
++-------------+-------------+
+| Department1 | Department2 |
++-------------+-------------+
+| Testing     | maintenance |
+| Testing     | IT          |
+| Testing     | production  |
+| Testing     | Quality     |
+| maintenance | IT          |
+| maintenance | production  |
+| maintenance | Quality     |
+| IT          | production  |
+| IT          | Quality     |
+| production  | Quality     |
++-------------+-------------+
+10 rows in set (0.01 sec)
