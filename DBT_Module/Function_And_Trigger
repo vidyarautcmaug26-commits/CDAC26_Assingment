@@ -1,0 +1,608 @@
+Stored function?
+
+As stored function is a named program stored in mysql;
+
+delimiter //
+
+create function function_name(parameter)
+returns data_type;
+
+begin
+
+-------statement
+
+return value;
+
+End //
+
+delimiter ;
+
+returns---
+
+delimiter //
+
+create function get_company_alise()
+returns varchar(50)
+
+begin
+return 'C-DAC mumbai';
+
+end //
+
+delimiter ;
+select get_company_name();
+
+mysql> select get_company_alise();
++---------------------+
+| get_company_alise() |
++---------------------+
+| C-DAC mumbai        |
++---------------------+
+1 row in set (0.01 sec)
+--------------------------------------------------------
+
+2.Function with one parameter
+delimiter //
+create function sqre_number(N int)
+returns int
+DETERMINISTIC
+NO SQL
+READS SQL DATA
+begin
+return N*N;
+end //
+
+delimiter ;
+output:
+mysql> select sqre_number(5);
++----------------+
+| sqre_number(5) |
++----------------+
+|             25 |
++----------------+
+1 row in set (0.01 sec)
+
+---------------------------------------------------------------
+
+mysql> delimiter //
+mysql> create function sqre_number(N int)
+    -> returns int
+    -> begin
+    -> return N*N;
+    -> end //
+ERROR 1418 (HY000): This function has none of DETERMINISTIC, NO SQL, or READS SQL DATA in its declaration and binary logging is enabled (you *might* want to use the less 
+safe log_bin_trust_function_creators variable)
+----------------------------------------------------------------------
+delimiter //
+create function square_number( N int)
+returns int
+
+Deterministic 
+No sql
+Reads sql data 
+Begin
+
+return N*N;
+
+end //
+
+delimiter ;
+
+
+set gloabal log_trust_function_creators=1;
+///////////////////////////////////////////set global log_bin_trust_function_creators =1;
+
+
+
+------------------------------------
+
+delimiter //
+create function total_amount(price decimal(10,2),quantity int)
+
+returns decimal(12,2)
+Deterministic 
+No sql
+Reads sql data 
+
+begin
+
+return price*quantity;
+
+end //
+delimiter ;
+
+select total_amount(56.20,10);
+
+mysql> select  total_amount(85624.2,50);
++--------------------------+
+| total_amount(85624.2,50) |
++--------------------------+
+|               4281210.00 |
++--------------------------+
+1 row in set (0.00 sec)
+--------------------------------------
+
+delimiter //
+create function get_grade(s_marks int)
+
+returns varchar(2)
+DETERMINISTIC
+NO SQL
+begin
+
+if s_marks>=90 then
+return 'A+';
+
+elseif s_marks>=80 then
+return 'A';
+
+elseif s_marks>=70 then 
+return 'B';
+
+elseif s_marks>=60 then
+return 'c';
+
+elseif s_marks>=50 then
+return 'D';
+
+else
+return 'F';
+
+end if;
+
+end //
+
+delimiter ;
+
+select get_grade(85);
+
+output:
+mysql> delimiter ;
+mysql> select get_grade(85);
++---------------+
+| get_grade(85) |
++---------------+
+| A             |
++---------------+
+1 row in set (0.01 sec)
+--------------------------------------------
+
+3.Function in select statement
+
+select student_id,name,marks,get_grade(marks) from students;
+
+show create function get_grade;
+
+output:
+mysql> select student_id,name,marks,get_grade(marks) from student;
++------------+----------------+-------+------------------+
+| student_id | name           | marks | get_grade(marks) |
++------------+----------------+-------+------------------+
+|        101 | Amit patil     | 85.80 | A                |
+|        102 | Neha choudhari | 92.00 | A+               |
+|        103 | Rahul Khot     | 76.50 | B                |
+|        104 | Priya Bapat    | 88.00 | A                |
++------------+----------------+-------+------------------+
+4 rows in set (0.00 sec)
+
+-----------------------------------------------
+
+4.Funtion in where
+
+select student_id,name,marks from student where get_grade(marks)='A';
+
+output:
++------------+-------------+-------+------------------+
+| student_id | name        | marks | get_grade(marks) |
++------------+-------------+-------+------------------+
+|        101 | Amit patil  | 85.80 | A                |
+|        104 | Priya Bapat | 88.00 | A                |
++------------+-------------+-------+------------------+
+2 rows in set (0.00 sec)
+---------------------------------------------------
+5.function in order by:
+select student_id,name,marks,get_grade(marks) as grade from student order by grade;
+
+output:
+mysql> select student_id,name,marks,get_grade(marks) from student order by get_grade(marks);
++------------+----------------+-------+------------------+
+| student_id | name           | marks | get_grade(marks) |
++------------+----------------+-------+------------------+
+|        101 | Amit patil     | 85.80 | A                |
+|        104 | Priya Bapat    | 88.00 | A                |
+|        102 | Neha choudhari | 92.00 | A+               |
+|        103 | Rahul Khot     | 76.50 | B                |
++------------+----------------+-------+------------------+
+4 rows in set (0.00 sec)
+or
+select student_id,name,marks,get_grade(marks) as grade from student order by case
+grade
+when 'A+' then 1
+else 2
+end,
+grade;
+
+---------------------------------------------------
+
+to calculate the annual salary of the employee;
+
+select * from employee;
+
+delimiter //
+create function annual_salary(monthly_salary decimal (10,2))
+returns decimal(12,2)
+DETERMINISTIC
+NO SQL
+READS SQL DATA
+begin
+return (monthly_salary+(monthly_salary*0.30))*12;
+end //
+
+delimiter ;
+
+select annual_salary(60000);
+
+output:
+mysql> select annual_salary(60000);
++----------------------+
+| annual_salary(60000) |
++----------------------+
+|            936000.00 |
++----------------------+
+1 row in set (0.01 sec)
+------------------------------------------------------
+
+select emp_id,emp_name,salary,annual_salary(salary)as annual_salary from employee;
+
+mysql> select emp_id,emp_name,salary,annual_salary(salary)as annual_salary from employee;
++--------+----------+----------+---------------+
+| emp_id | emp_name | salary   | annual_salary |
++--------+----------+----------+---------------+
+|      1 | Aniket   | 50000.00 |     780000.00 |
+|      2 | pranav   | 60000.00 |     936000.00 |
+|      3 | omkar    | 70000.00 |    1092000.00 |
+|      4 | Abhishek | 85000.00 |    1326000.00 |
+|      5 | Aditya   | 90000.00 |    1404000.00 |
+|      6 | shiv     | 95000.00 |    1482000.00 |
+|      7 | nita     | 65000.00 |    1014000.00 |
++--------+----------+----------+---------------+
+
+------------------------------------------------------
+
+delimiter //
+
+create function calculate_discount(amount decimal(10,2))
+
+returns decimal(10,2)
+deterministic
+no sql
+reads sql data
+
+begin
+
+if amount>=10000 then
+return amount*0.10;
+
+elseif amount>=20000 then
+return amount*0.20;
+
+else
+
+return amount * 0.03;
+end if;
+end //
+
+delimiter ;
+
+mysql> select calculate_discount(30000);
++---------------------------+
+| calculate_discount(30000) |
++---------------------------+
+|                   6000.00 |
++---------------------------+
+1 row in set (0.01 sec)
+
+
+show function status
+where db='oct14';
+
+----------------------------------------------------------------
+
+set global log_bin_trust_function_creators=0;
+ show variable like 'log_bin_trust_function_creators';
+ -----------------------------
+ 
+ ##TRIGGERS
+ 
+ triggere: automatic action related tables/timing and events are there/insert update delete
+ procedures:used for buisness logic
+ 
+ 
+ timing                   event                meaning
+ Before                  Insert              before insert a new in tables
+ After                   Insert              after inserting a row
+ before                  update              before updating row of the tables
+ After                   update              after updating a row of the tables
+ before                  delete              before deleting a row of yhe tables
+ after                   delete              after deleting a row of the tables
+ 
+ 
+create trigger trigger_name
+
+after update on table_name
+
+for each row
+begin
+
+---trigger logic
+
+end;
+
+old and new ----
+
+insert ----old values will not be available-----new values will be there/insert
+update------old values will be there-----new value will be there
+delete------old value will be there-----new value will be there
+------------------
+
+delimiter //
+create trigger trigger_name
+before | after
+insert | update | delete
+
+on table_name
+for each row
+begin
+
+--trigger logic
+
+end//
+
+delimiter ;
+----------------------
+create table audit_table(
+audit_id int primary key auto_increment,emp_id int,emp_name varchar(30),
+old_salary decimal(10,2),new_salary decimal(10,2),change_on datetime);
+);
+
+delimiter //
+
+create trigger trg_salary_audit
+after update on employee
+for each row 
+begin 
+insert into audit_table(emp_id,emp_name,old_salary,new_salary,change_on)
+values(new.emp_id,new.emp_name,old.salary,new.salary,now());
+
+end //
+delimiter ;
+-------------------------------------
+
+update employee set salary=90000 where emp_id=101;
+
+output:
+mysql> select * from employee;
++--------+----------+----------+
+| emp_id | emp_name | salary   |
++--------+----------+----------+
+|    101 | vidya    | 65000.00 |
+|    102 | Anvesha  | 70555.00 |
+|    103 | Sidhdesh | 89000.00 |
++--------+----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from audit_table;
++----------+--------+----------+------------+------------+---------------------+
+| audit_id | emp_id | emp_name | old_salary | new_salary | change_on           |
++----------+--------+----------+------------+------------+---------------------+
+|        1 |    101 | vidya    |   50000.00 |   65000.00 | 2026-10-16 19:41:19 |
++----------+--------+----------+------------+------------+---------------------+
+1 row in set (0.00 sec)
+
+--------------------------------------
+
+delimiter //
+create trigger trg_check_salary
+before insert on employee
+for each row
+
+begin
+if new.salary<0 then
+signal sqlstate '45000'
+set message_text='salary cannot be negative';
+
+end if;
+
+end //
+delimiter ;
+
+insert into employee values(104,'Rohit',75000);
+
+insert into employee values(105,'Aniket',-25000);
+
+output
+mysql> insert into employee values(104,'Rohit',850000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values(105,'Aniket',-850000);
+ERROR 1644 (45000): salary cannot be negative
+mysql> select * from employee;
++--------+----------+-----------+
+| emp_id | emp_name | salary    |
++--------+----------+-----------+
+|    101 | vidya    |  65000.00 |
+|    102 | Anvesha  |  70555.00 |
+|    103 | Sidhdesh |  89000.00 |
+|    104 | Rohit    | 850000.00 |
++--------+----------+-----------+
+4 rows in set (0.00 sec)
+
+------------------------------------------
+
+delimiter //
+create trigger trg_check_salary1
+after insert on employee
+for each row
+
+begin
+if new.salary<0 then
+signal sqlstate '45000'
+set message_text='salary cannot be negative';
+
+end if;
+
+end //
+delimiter ;
+
+insert into employee values(104,'Rohit',75000);
+
+insert into employee values(105,'Aniket',-25000);
+
+--------------------------------------------------------------
+
+create table product(product_id int primary key,product_name varchar(30),stock int);
+
+create table orders(order_id int,product_id int,quantity int);
+
+insert into product values(1,'Iphone_17',300),(2,'samsungpro',250),(3,'Nokia',500);
+
+
+delimiter //
+
+create trigger trg_stock_update
+after insert on orders
+for each row
+begin
+update product
+set stock=stock-new.quantity
+where product_id=new.product_id;
+
+end //
+
+delimiter ;
+
+insert into orders(1,1,50);
+
+
+----------------------------------------
+delimiter //
+
+create trg_check_salary
+
+after insert on employee
+for each row
+begin
+
+if new.salary<0 then
+   signal sqlstate '45000'
+   set message_text='salary cannot be negative';
+   
+   insert into employee rep(emp_id,emp_name,)
+   
+   
+   
+   
+   
+   
+   --------------------------------------
+   
+   
+   create trigger trg_first
+   after delete on employee
+   for each row
+   begin
+   --logic
+   end //
+   
+   create trigger trg_second
+   after update on employee
+   for each row
+   follows trg_first
+   
+   begin
+   
+   ----logic
+   
+   end //
+   ---------------------------------
+   
+   select * from employee;
+   
+   select * from audit_table;
+   
+   update employee set salary=75000 where emp_id=101;
+   
+   select * from audit_table;
+   
+   start transaction;
+   update employee set salary=95000 where emp_id=102;
+   
+   rollback;
+    output:
+	
+	mysql> update employee set salary=75000 where emp_id=103;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql>
+mysql> select * from audit_table;
++----------+--------+----------+------------+------------+---------------------+
+| audit_id | emp_id | emp_name | old_salary | new_salary | change_on           |
++----------+--------+----------+------------+------------+---------------------+
+|        1 |    101 | vidya    |   50000.00 |   65000.00 | 2026-10-16 19:41:19 |
+|        2 |    103 | Sidhdesh |   89000.00 |   75000.00 | 2026-10-16 20:23:02 |
++----------+--------+----------+------------+------------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update employee set salary=50000 where emp_id=102;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from audit_table;
++----------+--------+----------+------------+------------+---------------------+
+| audit_id | emp_id | emp_name | old_salary | new_salary | change_on           |
++----------+--------+----------+------------+------------+---------------------+
+|        1 |    101 | vidya    |   50000.00 |   65000.00 | 2026-10-16 19:41:19 |
+|        2 |    103 | Sidhdesh |   89000.00 |   75000.00 | 2026-10-16 20:23:02 |
+|        3 |    102 | Anvesha  |   70555.00 |   50000.00 | 2026-10-16 20:24:28 |
++----------+--------+----------+------------+------------+---------------------+
+3 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from audit_table;
++----------+--------+----------+------------+------------+---------------------+
+| audit_id | emp_id | emp_name | old_salary | new_salary | change_on           |
++----------+--------+----------+------------+------------+---------------------+
+|        1 |    101 | vidya    |   50000.00 |   65000.00 | 2026-10-16 19:41:19 |
+|        2 |    103 | Sidhdesh |   89000.00 |   75000.00 | 2026-10-16 20:23:02 |
++----------+--------+----------+------------+------------+---------------------+
+2 rows in set (0.00 sec)
+-----------------------------------------------------
+
+after commit 
+
+
+mysql>    update employee set salary=95000 where emp_id=102;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> commit;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from audit_table;
++----------+--------+----------+------------+------------+---------------------+
+| audit_id | emp_id | emp_name | old_salary | new_salary | change_on           |
++----------+--------+----------+------------+------------+---------------------+
+|        1 |    101 | vidya    |   50000.00 |   65000.00 | 2026-10-16 19:41:19 |
+|        2 |    103 | Sidhdesh |   89000.00 |   75000.00 | 2026-10-16 20:23:02 |
+|        4 |    102 | Anvesha  |   70555.00 |   95000.00 | 2026-10-16 20:27:18 |
++----------+--------+----------+------------+------------+---------------------+
+3 rows in set (0.00 sec)
