@@ -1,0 +1,302 @@
+Q1. Check Even or Odd  Create a stored procedure check_even_odd that accepts an 
+integer and displays whether the number is Even or Odd. Test cases: CALL check_even_odd(25); 
+CALL check_even_odd(40); 
+
+
+delimiter //
+create procedure check_even_odd(In num int)
+begin
+if mod(num,2)=0 then
+select 'even' as result;
+else
+select 'add' as result;
+end if;
+end //
+delimiter ;
+
+output:
+mysql> call check_even_odd(24);
++--------+
+| result |
++--------+
+| even   |
++--------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> call check_even_odd(11);
++--------+
+| result |
++--------+
+| odd    |
++--------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+------------------------------------------------------------------------------------------------
+
+Q2. Calculate Simple Interest  Create a stored procedure calculate_interest that accepts
+ principal amount, rate of interest, and time in years and calculates Simple Interest. Simple Interest = (Principal × Rate × Time) / 100 Test cases: CALL calculate_interest(10000, 5, 2); 
+CALL calculate_interest(25000, 7, 3); 
+
+delimiter //
+create procedure calculate_interest1(In principal_amount decimal(10,2),rate_of_interest int,time_in_year int)
+begin 
+declare simple_interest decimal(10,2);
+
+set simple_interest=(principal_amount*rate_of_interest*time_in_year)/100;
+select simple_interest as Simple_Interest;
+
+end //
+output:
+mysql> delimiter ;
+mysql> call calculate_interest1(50000,5,5);
++-----------------+
+| Simple_Interest |
++-----------------+
+|        12500.00 |
++-----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+------------------------------------------------------------------------------------------------
+3.Q3. Calculate Grade  Create a stored procedure calculate_grade that accepts 
+student ID, student name, and marks and displays the student's grade. Marks 90–100 
+Grade A+ 80–89 70–79 A B 60–69 50–59 C D Below 50 F Test 
+cases: 
+CALL calculate_grade(101, 'Amit', 85); 
+CALL calculate_grade(102, 'Priya', 72); CALL calculate_grade(103, 'Rahul', 45); 
+
+
+delimiter //
+create procedure calculate_grade2(In studentid int,studentname varchar(30),marks int)
+begin
+declare student_grade char(5);
+
+if marks>90 then
+set student_grade='A+';
+
+elseif marks>80 then
+set student_grade='A';
+
+elseif marks>70 then
+set student_grade='B';
+
+elseif marks>60 then 
+set student_grade='C';
+
+elseif marks>50 then 
+set student_grade='D';
+
+elseif marks<50 then 
+set student_grade='F';
+
+else 
+select 'Student is Absent' as message;
+
+end if;
+SELECT studentid AS Student_ID,
+               studentname AS Student_Name,
+               marks AS Marks,
+               student_grade AS Grade;
+end //
+
+mysql> call calculate_grade2(101,'Anvesha',95);
++------------+--------------+-------+-------+
+| Student_ID | Student_Name | Marks | Grade |
++------------+--------------+-------+-------+
+|        101 | Anvesha      |    95 | A+    |
++------------+--------------+-------+-------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+---------------------------------------------------------------------------------------------------------------
+Q4. Calculate Employee Bonus   Create a stored procedure calculate_bonus that accepts employee name and salary and calculates the bonus according to the following rules. Display employee name, salary, bonus percentage, bonus amount, and total salary. Bonus Salary ≥ 100000 ≥ 50000 20% 15% ≥ 30000 Below 30000 10% 5% 
+Test cases: 
+CALL calculate_bonus('Amit', 120000); CALL calculate_bonus('Priya', 65000); 
+CALL calculate_bonus('Rahul', 25000); 
+
+
+delimiter //
+create procedure calculate_bonuse(In emp_name varchar(30),salary decimal(10,2))
+
+begin 
+declare bonus_amount decimal(10,2);
+declare bonus_percentage decimal(5,2);
+declare total_salary decimal(10,2);
+
+if salary>=100000 then 
+set bonus_percentage=0.20;
+elseif salary>=50000 then 
+set bonus_percentage=0.15;
+elseif salary>=30000 then 
+set bonus_percentage=0.10;
+else
+set bonus_percentage=0.5;
+end if;
+set bonus_amount=salary*bonus_percentage;
+set total_salary=salary+bonus_amount;
+
+
+select emp_name as employee_name,salary as salary,
+bonus_amount as bonus_amount,bonus_percentage as bonus_percentage,
+total_salary as Total_salary;
+end //
+
+delimiter ;
+
+output:
+
+mysql> call calculate_bonuse('Vidya',50000);
++---------------+----------+--------------+------------------+--------------+
+| employee_name | salary   | bonus_amount | bonus_percentage | Total_salary |
++---------------+----------+--------------+------------------+--------------+
+| Vidya         | 50000.00 |      7500.00 |             0.15 |     57500.00 |
++---------------+----------+--------------+------------------+--------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+------------------------------------------------------------------------------------------------------------
+Q5.Find Maximum of Three Numbers — Create a stored procedure find_maximum that accepts three 
+integers and displays the largest number. Test cases: CALL find_maximum(25, 78, 45); 
+CALL find_maximum(100, 50, 75); CALL find_maximum(30, 30, 20); 
+
+delimiter //
+create procedure find_maximum(In a int,b int,c int)
+
+begin
+declare max_num int;
+if a>=b and a>=c then
+set max_num=a;
+
+elseif b>=a and b>=c then
+set max_num=b;
+
+else 
+set max_num=c;
+end if;
+select max_num as Maximum_Number;
+end //
+
+mysql> call find_maximum(45,85,40);
++----------------+
+| Maximum_Number |
++----------------+
+|             85 |
++----------------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+-------------------------------------------------------------------------------------------------------
+Q6. Employee Salary Analysis  Create a stored procedure salary_analysis that accepts employee name and salary. 
+Determine the salary category and allowance, then calculate the final salary. Display employee name, salary, category, 
+allowance percentage, allowance amount, and final salary. Salary Category ≥ 100000 High Allowance 20% ≥ 50000 Medium 15% Below 50000
+Low 10% Allowance = Salary × Allowance Percentage / 100 Final Salary = Salary + Allowance Test cases: CALL salary_analysis('Amit', 120000); 
+CALL salary_analysis('Priya', 60000); CALL salary_analysis('Rahul', 35000); 
+
+
+delimiter //
+create procedure salary_Analysis12(In emp_name varchar(30),salary decimal(10,2))
+begin 
+declare allowance_amount decimal(10,2);
+declare final_salary decimal(10,2);
+declare category char(10);
+declare allowance_percentage decimal(5,2);
+
+if salary>=100000 then
+set category='High';
+set allowance_percentage=0.20;
+
+elseif salary>=50000 then 
+set category='Medium';
+set allowance_percentage=0.15;
+
+else 
+set category='Low';
+set allowance_percentage=0.10;
+
+end if;
+
+set allowance_amount=salary*allowance_percentage;
+set final_salary=salary+allowance_amount;
+
+select emp_name as Employee_Name,salary as salary,category as category,allowance_percentage as Allowance_Percentage,allowance_amount as Allowance_amount,final_salary as Final_Salary;
+end //
+
+
+output:
+
++---------------+-----------+----------+----------------------+------------------+--------------+
+| Employee_Name | salary    | category | Allowance_Percentage | Allowance_amount | Final_Salary |
++---------------+-----------+----------+----------------------+------------------+--------------+
+| Amit          | 120000.00 | High     |                 0.20 |         24000.00 |    144000.00 |
++---------------+-----------+----------+----------------------+------------------+--------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q7. Electricity Bill Calculation  Create a stored procedure calculate_electricity_bill
+ that accepts consumer name and units consumed. Calculate the electricity bill using the slab-wise 
+ rates below. Display consumer name, units consumed, and total bill amount. Units First 100 units Rate ₹2 per unit Next
+ 100 units Next 200 units ₹3 per unit ₹5 per unit ₹7 per unit Above 400 units Test cases: 
+ CALL calculate_electricity_bill('Amit', 80); 
+ CALL calculate_electricity_bill('Priya', 150); 
+ CALL calculate_electricity_bill('Rahul', 350); 
+ CALL calculate_electricity_bill('Sneha', 500); 
+ 
+ 
+
+DELIMITER //
+
+CREATE PROCEDURE calculate_electricity_bill(
+    IN consumer_name VARCHAR(30),
+    IN units INT
+)
+BEGIN
+    DECLARE total_bill DECIMAL(10,2);
+
+    IF units <= 100 THEN
+        SET total_bill = units * 2;
+
+    ELSEIF units <= 200 THEN
+        SET total_bill = (100 * 2)
+                       + (units - 100) * 3;
+
+    ELSEIF units <= 400 THEN
+        SET total_bill = (100 * 2)
+                       + (100 * 3)
+                       + (units - 200) * 5;
+
+    ELSE
+        SET total_bill = (100 * 2)
+                       + (100 * 3)
+                       + (200 * 5)
+                       + (units - 400) * 7;
+    END IF;
+
+    SELECT
+        consumer_name AS Consumer_Name,
+        units AS Units_Consumed,
+        total_bill AS Total_Bill_Amount;
+END //
+
+DELIMITER ;
+
+output:
+
+mysql> call calculate_electricity_bill('priya',150);
++---------------+----------------+-------------------+
+| Consumer_Name | Units_Consumed | Total_Bill_Amount |
++---------------+----------------+-------------------+
+| priya         |            150 |            350.00 |
++---------------+----------------+-------------------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
