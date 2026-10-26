@@ -1,1 +1,85 @@
+loin.html File
+<html>
 
+<head>
+    <link rel="stylesheet" type="text/css" href="login.css">
+    <title>Login-Page</title>
+
+</head>
+
+<body>
+    <h2>Login-Page</h2>
+    <form id="loginForm">
+        <label>
+            Username
+        </label>
+        <input type="text" id="username" placeholder="Enter Username">
+        <br><br>
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter Password">
+        <br><br>
+        <input type="submit" id="signin" value="Sign in">
+        <p id="message"></p>
+        <script src="login.js"></script>
+
+    </form>
+</body>
+
+</html>
+-------------------------------------------------------------------------------------------------------------
+login.css File
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: violet;
+}
+
+h2 {
+    text-align: center;
+    font-weight: 200;
+    color: black;
+
+}
+
+form {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+}
+
+input {
+    margin-top: 10px;
+    padding: 8px;
+}
+
+input[type="submit"] {
+    background-color: green;
+    color: white;
+
+    margin: 10px auto;
+    width: 250px;
+
+}
+----------------------------------------------------------------------------------
+login.js File
+document.getElementById("loginForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let message = document.getElementById("message");
+    if (username === "" || password === "") {
+        message.innerHTML = "Please enter username and password";
+        message.style.color = "red";
+    }
+    else if (username === "admin" && password === "12345") {
+        message.innerHTML = "Login successful";
+        message.style.color = "green";
+
+    }
+    else {
+        message.innerHTML = "Invalid username and password";
+        message.style.color = "red";
+    }
+});
