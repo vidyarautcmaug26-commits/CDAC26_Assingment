@@ -1,0 +1,143 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7fb;
+    color: #222222;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 15px 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 8px #dddddd;
+}
+
+header div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #234e70;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+
+}
+
+nav a {
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+    transition: color 0.3s;
+
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+#home {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(to right, #e4ecf5, #ffffff);
+    ;
+}
+
+#home h2 {
+    font-size: 36px;
+    color: #234e70;
+    margin-bottom: 20px;
+
+}
+
+#home p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+#home a {
+    display: inline-block;
+    background-color: #234e70;
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+#home a:hover {
+    background-color: #007bff;
+}
+
+#about {
+    background-color: white;
+    padding: 30px;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+#about h2 {
+    line-height: 1.7;
+}
+
+#cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+
+#education {
+    flex: 1;
+}
+
+#skills {
+    flex: 1;
+}
+
+#projects {
+    flex: 2;
+}
+
+#education:hover,
+#skills:hover,
+#projects:hover {
+    background-color: #e4ecf5;
+    transition: background-color 0.3s;
+}
+
+#education h3,
+#skills h3,
+#projects h3 {
+    color: #234e70;
+    margin-bottom: 15px;
+}
+
+#education,
+#skills,
+#projects {
+    width: 40%;
+    background-color: white;
+    padding: 25px;
+    margin: 15px;
+    border: 1px solid #d5dfea;
+    border-radius: 10px;
+}
